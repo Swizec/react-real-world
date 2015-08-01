@@ -1,7 +1,8 @@
 
 const React = require('react');
 
-const TheButton = require('./TheButton');
+const TheButton = require('./TheButton'),
+      Descriptor = require('./Descriptor');
 
 const Counter = React.createClass({
     getInitialState: function () {
@@ -17,7 +18,7 @@ const Counter = React.createClass({
     render: function () {
         return (
             <div>
-                <p>You have clicked The Button {this.state.counter} times!</p>
+                <Descriptor count={this.state.counter} />
                 <TheButton clicked={this.inc} />
             </div>
         );
