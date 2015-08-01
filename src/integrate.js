@@ -1,0 +1,2 @@
+
+RenderCounter(".container .counter");
