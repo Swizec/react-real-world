@@ -1,2 +1,4 @@
 
-RenderCounter(".container .counter");
+//RenderCounter(".container .counter");
+
+$(".container .counter").clickCounter();

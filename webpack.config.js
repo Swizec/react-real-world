@@ -28,7 +28,8 @@ module.exports = {
     },
     externals: {
         "react": "React",
-        "react/addons": "React"
+        "react/addons": "React",
+        "jQuery": "jQuery"
     },
     devtool: 'eval-source-map'
 };
