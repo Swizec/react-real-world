@@ -8,17 +8,38 @@
 
     <body>
         <div class="container">
-            <h1>Below is a React component</h1>
-            <div class="counter">
+            <h1>React components as jQuery plugins</h1>
+
+            <div class="hide-in-iframe">
+                <p class="lead">React is awesome. You've seen it, you've tried it, you've loved it. Fast rendering, a lack confusing two-way-binding, a built-in disdain for architecture astronautics, and very little boilerplate. Everything you've ever wanted in a web framework.</p>
+                <p class="lead">At the very least, React looks like a promising new toy.</p>
+
+                <p>But unless you're a Facebook or something, fun new toys don't print money. Wordpress and Drupal and the PHP of old glued together with many jQuery plugins print money. Users don't care whether you're having fun with your code or not, they want results. They want to make money and feel like a million bucks and do the stuff they couldn't do before they hired you.</p>
+
+                <p>And so you look at React and you think <quote>"Man, that is going to be really awesome to use on the <i>next</i> project!"</quote>.</p>
+
+                <p>Then the next project comes and it's got a tight deadline and you make it with the same old tech again because it's reliable and because it prints money and it's not <i>that</i> bad.</p>
+
+                <p>Fear not! You can turn React components into plain old jQuery plugins. That's right, you get to have your cake and eat it too.</p>
+
+                <p>You can learn the details on my blog, <a href="">here</a>. Or keep reading.</p>
+
+                <h2>Proof of concept</h2>
+            </div>
+
+            <p>This is a React component, <code>&lt;Counter /&gt;</code>. It counts button clicks.</p>
+
+            <div class="counter" style="border: 1px solid #ddd; padding: 1em;">
             </div>
             <p>&nbsp;</p>
-            <p>But nothing else you see is made with React. Just a normal old school website.</p>
-            <p>In fact, the React component is embedded as a jQuery plugin. These buttons access the React component's state via jQuery methods:
+            <p>Everything else is a normal old school website.</p>
+            <p>The React component is embedded as a normal jQuery plugin. These buttons access its state via jQuery methods:<br>
                 <a class="btn btn-default btn-10x">jQuery 10x Button</a>
                 <a class="btn btn-default btn-get">jQuery Get Value</a>
             </p>
 
             <div class="hide-in-iframe">
+                <h2>Real world interface</h2>
                 <p>This is how the real world can use the above <code>&lt;Counter /&gt;</code> component:</p>
                 <pre><code class="javascript">
 $(".container .counter").clickCounter();
