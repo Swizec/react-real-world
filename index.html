@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/default.min.css">
     </head>
 
     <body>
@@ -12,15 +13,68 @@
             </div>
             <p>&nbsp;</p>
             <p>But nothing else you see is made with React. Just a normal old school website.</p>
-            <p>In fact, the React component is embedded as a jQuery plugin.: These buttons access the React component's state via jQuery methods:
+            <p>In fact, the React component is embedded as a jQuery plugin. These buttons access the React component's state via jQuery methods:
                 <a class="btn btn-default btn-10x">jQuery 10x Button</a>
                 <a class="btn btn-default btn-get">jQuery Get Value</a>
             </p>
+
+            <div class="hide-in-iframe">
+                <p>This is how the real world can use the above <code>&lt;Counter /&gt;</code> component:</p>
+                <pre><code class="javascript">
+$(".container .counter").clickCounter();
+
+$(".btn-10x").click(function () {
+    $(".container .counter")
+        .clickCounter()[0]
+        .val(10);
+});
+
+$(".btn-get").click(function () {
+    var val = $(".container .counter")
+            .clickCounter()[0]
+            .val();
+
+    alert("Current counter value is: "+val);
+});
+                </code></pre>
+
+                <p>Pretty normal huh?</p>
+
+                <p>But you can use it like a normal React component, if you want:</p>
+                <pre><code class="jsx">
+const MyThing = React.createClass({
+    render: function () {
+        return (
+            &lt;div&gt;
+                &lt;Counter /&gt;
+            &lt;/div&gt;
+        )
+    }
+});
+                </code></pre>
+
+                <p>And if all else fails, you have the function options:</p>
+                <pre><code class="javascript">
+var RenderCounter = require('/path/to/counter.js');
+RenderCounter(".container .counter");
+
+// OR
+
+window.RenderCounter(".container .counter");
+                </code></pre>
+
+                <p>You should read an in-depth description of how this works on my blog, <a href="">here</a>.</p>
+                <p>Or check out the code on Github, <a href="https://github.com/Swizec/react-real-world">here</a>.</p>
+            </div>
         </div>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="build/counter.js"></script>
         <script src="src/integrate.js"></script>
+
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
     </body>
 </html>

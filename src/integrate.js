@@ -14,3 +14,9 @@ $(".btn-get").click(function () {
 
     alert("Current counter value is: "+val);
 });
+
+var isInIframe = (window.location != window.parent.location) ? true : false;
+
+if (isInIframe) {
+    $(".hide-in-iframe").hide();
+}
