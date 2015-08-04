@@ -6,13 +6,19 @@ const TheButton = require('./TheButton'),
 
 const Counter = React.createClass({
     getInitialState: function () {
-        return {counter: 0}
+        return {counter: this.props.value || 0}
     },
 
     inc: function () {
         this.setState({
             counter: this.state.counter+1
         });
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+        if (nextProps.value) {
+            this.setState({counter: nextProps.value});
+        }
     },
 
     render: function () {

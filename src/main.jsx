@@ -13,6 +13,7 @@ if (typeof jQuery !== 'undefined') {
     (function ($) {
         var pluginName = "clickCounter",
             defaults = {
+                value: 0
             };
 
         function Plugin(element, options) {
@@ -25,19 +26,29 @@ if (typeof jQuery !== 'undefined') {
 
         $.extend(Plugin.prototype, {
             init: function () {
-                //console.log("Hello init", this.element);
-                React.render(
-                    <Counter />,
+                this.component = React.render(
+                    <Counter value={this.settings.value} />,
                     this.element
                 );
+                return this;
+            },
+
+            val: function (val) {
+                if (!arguments.length) {
+                    return this.component.state.counter;
+                }else{
+                    this.settings.value = val;
+                    this.init();
+                }
             }
         });
 
         $.fn[pluginName] = function (options) {
-            return this.each(function () {
+            return this.map(function () {
                 if (!$.data(this, 'plugin_'+pluginName)) {
                     $.data(this, 'plugin_'+pluginName, new Plugin(this, options));
                 }
+                return $.data(this, 'plugin_'+pluginName);
             });
         };
     })(jQuery);
