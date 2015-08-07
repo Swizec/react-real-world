@@ -2,9 +2,10 @@
 $(".container .counter").clickCounter();
 
 $(".btn-10x").click(function () {
-    $(".container .counter")
-        .clickCounter()[0]
-        .val(10);
+    var counter = $(".container .counter")
+            .clickCounter()[0];
+
+    counter.val(counter.val()+10);
 });
 
 $(".btn-get").click(function () {
