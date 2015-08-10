@@ -4,44 +4,43 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/default.min.css">
+        <title>React components as jQuery plugins</title>
     </head>
 
     <body>
         <div class="container">
-            <h1>React components as jQuery plugins</h1>
+            <div class="col-md-9">
+                <h1>React components as jQuery plugins</h1>
 
-            <div class="hide-in-iframe">
-                <p class="lead">React is awesome. You've seen it, you've tried it, you've loved it. Fast rendering, a lack confusing two-way-binding, a built-in disdain for architecture astronautics, and very little boilerplate. Everything you've ever wanted in a web framework.</p>
-                <p class="lead">At the very least, React looks like a promising new toy.</p>
+                <div class="hide-in-iframe">
+                    <p class="lead">Did you know, you can use React without rewriting your whole app?</p>
 
-                <p>But unless you're a Facebook or something, fun new toys don't print money. Wordpress and Drupal and the PHP of old glued together with many jQuery plugins print money. Users don't care whether you're having fun with your code or not, they want results. They want to make money and feel like a million bucks and do the stuff they couldn't do before they hired you.</p>
+                    <p>A client recently asked me for a shiny graph. They had an API that spits out a lot of data, and they wanted an interactive visualization that would help users make decisions. Deadline was tight, technology restrictions were “As long as it works”, and specs were loose.</p>
 
-                <p>And so you look at React and you think <quote>"Man, that is going to be really awesome to use on the <i>next</i> project!"</quote>.</p>
+                    <p>“A-ha!”, I thought, “This is a job for <a href="http://swizec.com/reactd3js">React+d3.js</a>!”. Small, well-contained, perfect. The best kind of project for testing new technologies.</p>
 
-                <p>Then the next project comes and it's got a tight deadline and you make it with the same old tech again because it's reliable and because it prints money and it's not <i>that</i> bad.</p>
+                    <p>But their web app was built in Joomla or WordPress or something. And their front-end stack was jQuery. When I asked the engineer about integration, he talked about framework plugins that create views in PHP and load JavaScript files and stuff.</p>
 
-                <p>Fear not! You can turn React components into plain old jQuery plugins. That's right, you get to have your cake and eat it too.</p>
 
-                <p>You can learn the details on my blog, <a href="">here</a>. Or keep reading.</p>
 
-                <h2>Proof of concept</h2>
-            </div>
+                </div>
 
-            <p>This is a React component, <code>&lt;Counter /&gt;</code>. It counts button clicks.</p>
+                <p>This is a React component, <code>&lt;Counter /&gt;</code>. It counts button clicks.</p>
 
-            <div class="counter" style="border: 1px solid #ddd; padding: 1em;">
-            </div>
-            <p>&nbsp;</p>
-            <p>Everything else is a normal old school website.</p>
-            <p>The React component is embedded as a normal jQuery plugin. These buttons access its state via jQuery methods:<br>
-                <a class="btn btn-default btn-10x">jQuery 10x Button</a>
-                <a class="btn btn-default btn-get">jQuery Get Value</a>
-            </p>
+                <div class="counter" style="border: 1px solid #ddd; padding: 1em;">
+                </div>
+                <p>&nbsp;</p>
+                <p>Everything else is a normal old school website.</p>
+                <p>The React component is embedded as a normal jQuery plugin. These buttons access its state via jQuery methods:<br>
+                    <a class="btn btn-default btn-10x">jQuery 10x Button</a>
+                    <a class="btn btn-default btn-get">jQuery Get Value</a>
+                </p>
 
-            <div class="hide-in-iframe">
-                <h2>Real world interface</h2>
-                <p>This is how the real world can use the above <code>&lt;Counter /&gt;</code> component:</p>
-                <pre><code class="javascript">
+                <div class="hide-in-iframe">
+                    <h2>Real world interface</h2>
+                    <p>The real world can use <code>&lt;Counter /&gt;</code> as a jQuery plugin:</p>
+                    <pre><code class="javascript">
+// src/integrate.js
 $(".container .counter").clickCounter();
 
 $(".btn-10x").click(function () {
@@ -57,12 +56,13 @@ $(".btn-get").click(function () {
 
     alert("Current counter value is: "+val);
 });
-                </code></pre>
+                    </code></pre>
 
-                <p>Pretty normal huh?</p>
+                    <p>Pretty nice, eh?</p>
 
-                <p>But you can use it like a normal React component, if you want:</p>
-                <pre><code class="jsx">
+                    <p>You can still use it as a React component too:</p>
+                    <pre><code class="jsx">
+// example.jsx
 const MyThing = React.createClass({
     render: function () {
         return (
@@ -72,20 +72,72 @@ const MyThing = React.createClass({
         )
     }
 });
-                </code></pre>
+                    </code></pre>
 
-                <p>And if all else fails, you have the function options:</p>
-                <pre><code class="javascript">
+                    <p>And if all else fails, you have the function options:</p>
+                    <pre><code class="javascript">
+// example.js
 var RenderCounter = require('/path/to/counter.js');
 RenderCounter(".container .counter");
 
 // OR
 
 window.RenderCounter(".container .counter");
-                </code></pre>
+                    </code></pre>
 
-                <p>You should read an in-depth description of how this works on my blog, <a href="">here</a>.</p>
-                <p>Or check out the code on Github, <a href="https://github.com/Swizec/react-real-world">here</a>.</p>
+                    <h2>React -> jQuery wrapper</h2>
+
+                    <pre><code class="jsx">
+// src/main.jsx
+if (typeof jQuery !== 'undefined') {
+    (function ($) {
+        var pluginName = "clickCounter",
+            defaults = {
+                value: 0
+            };
+
+        function Plugin(element, options) {
+            this.element = element;
+            this.settings = $.extend({}, defaults, options);
+            this._defaults = defaults;
+            this._name = pluginName;
+            this.init();
+        }
+
+        $.extend(Plugin.prototype, {
+            init: function () {
+                this.component = React.render(
+                        <Counter value={this.settings.value} />,
+                    this.element
+                );
+                return this;
+            },
+
+            val: function (val) {
+                if (!arguments.length) {
+                    return this.component.state.counter;
+                }else{
+                    this.settings.value = val;
+                    this.init();
+                }
+            }
+        });
+
+        $.fn[pluginName] = function (options) {
+            return this.map(function () {
+                if (!$.data(this, 'plugin_'+pluginName)) {
+                    $.data(this, 'plugin_'+pluginName, new Plugin(this, options));
+                }
+                return $.data(this, 'plugin_'+pluginName);
+            });
+        };
+    })(jQuery);
+}
+                    </code></pre>
+
+                    <p>You can find an in-depth description on my blog, <a href="">here</a>. It includes the Webpack config you can use, and a more detailed description of how all this fits together.</p>
+                    <p>And the code is on Github, <a href="https://github.com/Swizec/react-real-world">here</a>.</p>
+                </div>
             </div>
         </div>
 
@@ -97,5 +149,16 @@ window.RenderCounter(".container .counter");
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script>
+         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+         ga('create', 'UA-1464315-1', 'auto');
+         ga('send', 'pageview');
+
+        </script>
+
     </body>
 </html>
